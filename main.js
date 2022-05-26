@@ -10,6 +10,7 @@ class Player {
       x: 0,
       y: 0
     }
+    this.rotation = 0
     const image = new Image()
     image.src = './img/pekora.png'
     image.onload = () => {
@@ -19,12 +20,27 @@ class Player {
       this.height = image.height * scale
       this.position = {
         x: canvas.width / 2 - this.width / 2,
-        y: canvas.height - this.height - 20
+        y: canvas.height - this.height - 100
       }
     }
 
   }
   draw() {
+
+    c.save()
+
+    c.translate(
+      player.position.x + player.width / 2,
+      player.position.y + player.height / 2
+      )
+
+    c.rotate(this.rotation)
+    
+    c.translate(
+      -player.position.x + player.width / 2,
+      -player.position.y + player.height / 2
+      )
+
     c.drawImage(
       this.image,
       this.position.x,
@@ -32,6 +48,8 @@ class Player {
       this.width,
       this.height
     )
+
+    c.restore()
   }
 
   update() {
@@ -47,13 +65,13 @@ const player = new Player()
 
 const keys = {
   a: {
-    pressed : false
+    pressed: false
   },
   d: {
-    pressed : false
+    pressed: false
   },
   space: {
-    pressed : false
+    pressed: false
   },
 }
 
@@ -64,13 +82,15 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height)
   player.update()
 
-  if (keys.a.pressed){
-    player.velocity.x = -5
-  }
-  else if (keys.d.pressed){
-    player.velocity.x = 5
+  if (keys.a.pressed && player.position.x >= 0) {
+    player.velocity.x = -7
+    player.rotation = -0.05
+  } else if (keys.d.pressed && player.position.x + player.width <= canvas.width) {
+    player.velocity.x = 7
+    player.rotation = 0.05
   } else {
     player.velocity.x = 0
+    player.rotation = 0
   }
 }
 
@@ -83,7 +103,7 @@ addEventListener('keydown', ({
     case 'a':
       keys.a.pressed = true
       break
-    case 'd': 
+    case 'd':
       keys.d.pressed = true
       break
     case ' ':
@@ -98,7 +118,7 @@ addEventListener('keyup', ({
     case 'a':
       keys.a.pressed = false
       break
-    case 'd': 
+    case 'd':
       keys.d.pressed = false
       break
     case ' ':
