@@ -244,7 +244,6 @@ class Grid {
         }))
       }
     }
-    console.log(this.invaders)
   }
 
   update() {
@@ -498,7 +497,6 @@ addEventListener('keydown', ({
 
         }))
 
-      console.log(projectiles)
       break
   }
 })
